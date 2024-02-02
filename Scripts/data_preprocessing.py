@@ -29,15 +29,14 @@ class DataPreprocessing:
             logging.info('Data preprocessing initiated')
             
             logging.info('Loading data')
-            features = unpickle_file(features_file_path)
-            target = unpickle_file(target_file_path)
+            features= unpickle_file(features_file_path)
+            target= unpickle_file(target_file_path)
 
-            logging.info('Splitting numerical and categorical features')
-            numerical_columns = features.select_dtypes(exclude='O').columns
-            categorical_columns = features.select_dtypes(include='O').columns
+            logging.info('fetching categorical features')
+            categorical_columns= features.select_dtypes(include='O').columns
 
             logging.info('Splitting train and test data')
-            train_features, test_features, train_target, test_target = train_test_split(features, target, test_size=0.2, random_state=42)
+            train_features, test_features, train_target, test_target= train_test_split(features, target, test_size=0.2, random_state=42)
 
             logging.info('Performing label encoding on categorical features')
             LE= LabelEncoder()
@@ -48,8 +47,8 @@ class DataPreprocessing:
             pickle_file(object=LE, file_name='label_encoder.pkl')
 
             logging.info('Encoding target label')
-            train_target = train_target.map({'N': 0, 'Y': 1})
-            test_target = test_target.map({'N': 0, 'Y': 1})
+            train_target= train_target.map({'N': 0, 'Y': 1})
+            test_target= test_target.map({'N': 0, 'Y': 1})
 
             logging.info('Data preprocessing completed')
             logging.info('Saving train and test data')
