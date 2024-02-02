@@ -1,12 +1,12 @@
 import os
 import pickle
 
-def pickle_file(dataframe, file_name, folder_name='artifacts'):
+def pickle_file(object, file_name, folder_name='artifacts'):
     """
     Pickle a Pandas DataFrame and save it to a specified folder.
 
     Parameters:
-    - dataframe (pd.DataFrame): The DataFrame to be pickled.
+    - object: Content to be stored.
     - file_name (str): The name of the pickled file.
     - folder_name (str, optional): The folder where the pickled file will be stored. Defaults to 'artifacts'.
 
@@ -26,5 +26,5 @@ def pickle_file(dataframe, file_name, folder_name='artifacts'):
     os.makedirs(folder_name, exist_ok=True)
     full_path = os.path.join(folder_name, file_name)
     with open(full_path, 'wb') as f:
-        pickle.dump(dataframe, f)
+        pickle.dump(object, f)
         print(f"DataFrame pickled and saved to: {full_path}")
