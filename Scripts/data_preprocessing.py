@@ -1,7 +1,7 @@
 import sys
-import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
+
 from utils.logger import logging
 from utils.exception import CustomException
 from utils.pickle_file import pickle_file

@@ -1,9 +1,12 @@
 import sys
 import pandas as pd
+
 from utils.logger import logging
 from utils.exception import CustomException
 from utils.pickle_file import pickle_file
+
 from Scripts.data_preprocessing import DataPreprocessing
+from Scripts.feature_engineering import FeatureEngineering
 
 class DataIngestion:
     def __init__(self) -> None:
@@ -31,6 +34,7 @@ class DataIngestion:
             
             logging.info('Cleaning raw data')
             dataframe= raw_dataframe[selected_columns]
+            dataframe= dataframe.dropna()
 
             logging.info('Creating features and target from cleaned data')
             features, target= dataframe.drop('neo', axis=1).copy(), dataframe['neo'].copy()
@@ -54,3 +58,9 @@ if __name__ == '__main__':
     # Data preprocessing
     data_preprocessing_object= DataPreprocessing()
     data_preprocessing_object.data_preprocessing(features_file_path='artifacts\\features.pkl', target_file_path='artifacts\\target.pkl')
+
+    # Feature Engineering
+    feature_engineering_object= FeatureEngineering()
+    feature_engineering_object.engineer_feature(train_features_file_path='artifacts\\train_features.pkl', test_features_file_path='artifacts\\test_features.pkl')
+
+    # 
