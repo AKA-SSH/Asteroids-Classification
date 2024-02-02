@@ -1,5 +1,4 @@
 import sys
-import pandas as pd
 from sklearn.cluster import MiniBatchKMeans
 
 from utils.logger import logging
@@ -37,6 +36,8 @@ class FeatureEngineering:
             kmeans_clustering= MiniBatchKMeans(n_clusters=optimal_clusters, random_state=42)
             train_cluster_labels= kmeans_clustering.fit_predict(train_features)
             test_cluster_labels= kmeans_clustering.predict(test_features)
+
+            pickle_file(object=kmeans_clustering, file_name='kmeans_clustering.pkl')
 
             logging.info('adding cluster labels to features')
             train_features['cluster']= train_cluster_labels
