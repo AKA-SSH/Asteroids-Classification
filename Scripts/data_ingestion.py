@@ -6,6 +6,9 @@ from utils.pickle_file import pickle_file
 from Scripts.data_preprocessing import DataPreprocessing
 
 class DataIngestion:
+    def __init__(self) -> None:
+        pass
+
     def data_ingestion(self, raw_data_file_path='Data\\raw_data.csv'):
         """
         Performs the data ingestion process for space object data.

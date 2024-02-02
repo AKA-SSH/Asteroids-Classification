@@ -8,10 +8,10 @@ from utils.pickle_file import pickle_file
 from utils.unpickle_file import unpickle_file
 
 class DataPreprocessing:
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
-    def data_preprocessing(self, features_file_path, target_file_path):
+    def data_preprocessing(self, features_file_path:str, target_file_path:str):
         """
         Performs data preprocessing for machine learning tasks.
 
