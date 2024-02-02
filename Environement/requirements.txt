@@ -1,0 +1,17 @@
+# notebook
+jupyter
+# data manipulation
+numpy
+pandas
+pyarrow
+imbalanced-learn
+# data representation
+tabulate
+seaborn
+matplotlib
+# machine learning
+scikit-learn
+# webapp
+streamlit
+# editable installation in current directory
+-e .
