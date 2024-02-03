@@ -120,8 +120,11 @@ celerybeat.pid
 *.sage.py
 
 # Pickle Files
-artifacts/
 *.pkl
+
+# Data Folders
+artifacts/
+model_testing_data/
 
 # Environments
 .env
