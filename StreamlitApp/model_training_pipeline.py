@@ -29,14 +29,11 @@ def main():
 
             st.subheader("Download Trained Model:")
             model_pickle = RFC 
-            download_button = st.button("Download Model Pickle")
-            if download_button:
-                st.write("Downloading...")
-                st.download_button(label="Download Model Pickle",
-                                   data=pickle.dumps(model_pickle),
-                                   file_name="trained_model.pkl",
-                                   key="trained_model")
-                st.success("Model pickle file downloaded successfully!")
+
+            st.download_button(label="Download Model Pickle",
+                               data=pickle.dumps(model_pickle),
+                               file_name="trained_model.pkl",
+                               key="trained_model")
 
         except Exception as e:
             st.error(f"An error occurred: {str(e)}")

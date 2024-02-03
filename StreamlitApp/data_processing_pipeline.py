@@ -36,10 +36,22 @@ def process_data(raw_data_csv):
     return resampled_features, resampled_target
 
 def get_csv_download_link(df_features, df_target):
+    # Exclude 'neo' column from df_features if it's present
+    if 'neo' in df_features.columns:
+        df_features = df_features.drop('neo', axis=1)
+    
+    # Concatenate features and target
     concatenated_df = pd.concat([df_features, df_target], axis=1)
+    
+    # Generate CSV file
     csv_file_str = concatenated_df.to_csv(index=False, encoding='utf-8')
+    
+    # Encode CSV file to base64 for download link
     b64 = base64.b64encode(csv_file_str.encode()).decode()
+    
+    # Create download link
     href = f'<a href="data:file/csv;base64,{b64}" download="processed_data.csv">Download processed data</a>'
+    
     return href
 
 def main():
