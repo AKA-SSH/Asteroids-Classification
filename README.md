@@ -40,4 +40,7 @@ In Astronomy, the size and complexity of data are increasing, particularly in th
 ## Installation
 Clone the project:
 ```bash
-git clone https://github.com/AKA-SSH/Asteroid-Classification-and-Clustering.git
+git clone https://github.com/AKA-SSH/Asteroids-Classification
+```
+## Acknowledgements
+I wouldn't be here without the help of NASA. I heartily thank NASA and JPL for maintaining such an wonderful database which is user friendly. JPL-authored documents are sponsored by NASA under Contract NAS7-030010. All documents available from this server may be protected under the U.S. and Foreign Copyright Laws. Permission to reproduce may be required.
