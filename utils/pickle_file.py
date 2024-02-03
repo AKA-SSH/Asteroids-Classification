@@ -27,4 +27,4 @@ def pickle_file(object, file_name, folder_name='artifacts'):
     full_path = os.path.join(folder_name, file_name)
     with open(full_path, 'wb') as f:
         pickle.dump(object, f)
-        print(f"{object} pickled and saved to: {full_path}")
+        print(f"Object pickled and saved to: {full_path}")
