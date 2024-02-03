@@ -8,6 +8,8 @@ from utils.pickle_file import pickle_file
 from Scripts.data_preprocessing import DataPreprocessing
 from Scripts.feature_engineering import FeatureEngineering
 from Scripts.oversampling import OverSampling
+from Scripts.model_training import ModelTrainer
+from Scripts.model_evaluation import EvaluateModel
 
 class DataIngestion:
     def __init__(self) -> None:
@@ -25,6 +27,12 @@ class DataIngestion:
 
         Returns:
         - tuple: A tuple containing the cleaned features and target data.
+
+        Example Usage:
+        ```python
+        data_ingestion_object = DataIngestion()
+        data_ingestion_object.data_ingestion(raw_data_file_path='path/to/raw_data.csv')
+        ```
         """
         try:
             logging.info('Data ingestion initiated')
@@ -37,12 +45,8 @@ class DataIngestion:
             dataframe = raw_dataframe[selected_columns]
             dataframe = dataframe.dropna()
 
-            logging.info(f'Shape after cleaning: {dataframe.shape}')
-
             logging.info('Creating features and target from cleaned data')
             features, target = dataframe.drop('neo', axis=1).copy(), dataframe['neo'].copy()
-
-            logging.info(f'Shape of features: {features.shape}, Shape of target: {target.shape}')
 
             logging.info('Data ingestion completed')
 
@@ -66,10 +70,17 @@ if __name__ == '__main__':
 
     # Feature Engineering
     feature_engineering_object = FeatureEngineering()
-    feature_engineering_object.engineer_feature(train_features_file_path='artifacts\\train_features.pkl', test_features_file_path='artifacts\\test_features.pkl', train_target_file_path='artifacts\\train_target.pkl', test_target_file_path='artifacts\\test_target.pkl')
+    feature_engineering_object.engineer_feature(train_features_file_path='artifacts\\train_features.pkl', test_features_file_path='artifacts\\test_features.pkl')
 
     # Over Sampling
     over_sampling_object = OverSampling()
-    over_sampling_object.over_sampler(train_features_file_path='artifacts\\train_features.pkl', train_target_file_path='artifacts\\test_features.pkl')
+    over_sampling_object.over_sampler(train_features_file_path='artifacts\\train_features.pkl', train_target_file_path='artifacts\\train_target.pkl')
 
     # Model Training
+    model_training_object = ModelTrainer()
+    model_training_object.model_trainer(resampled_train_features_file_path='artifacts\\resampled_train_features.pkl', resampled_train_target_file_path='artifacts\\resampled_train_target.pkl')
+
+    # Model Evaluation
+    model_evaluation_object= EvaluateModel()
+    message= model_evaluation_object.model_evaluation(test_features_file_path='artifacts\\test_features.pkl', test_target_file_path='artifacts\\test_target.pkl', model_file_path='artifacts\\model.pkl')
+    print(message)

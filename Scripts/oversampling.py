@@ -1,4 +1,5 @@
 import sys
+import pandas as pd
 from imblearn.over_sampling import RandomOverSampler
 from utils.logger import logging
 from utils.exception import CustomException
@@ -10,6 +11,25 @@ class OverSampling:
         pass
 
     def over_sampler(self, train_features_file_path, train_target_file_path):
+        """
+        Perform random over-sampling on the given training features and target.
+
+        Parameters:
+        - train_features_file_path (str): File path to the pickled file containing training features.
+        - train_target_file_path (str): File path to the pickled file containing training target.
+
+        Raises:
+        - CustomException: If an error occurs during the random over-sampling process.
+
+        Returns:
+        None
+
+        Example Usage:
+        ```python
+        over_sampler = OverSampling()
+        over_sampler.over_sampler('path/to/train_features.pkl', 'path/to/train_target.pkl')
+        ```
+        """
         try:
             logging.info('Random over-sampling initiated')
 
@@ -17,18 +37,13 @@ class OverSampling:
             train_features = unpickle_file(train_features_file_path)
             train_target = unpickle_file(train_target_file_path)
 
-            train_target = train_target.values.ravel()
-            train_target = train_target.astype(int)
-
-            logging.info(f'Shape of train_features: {train_features.shape}')
-            logging.info(f'Shape of train_target: {train_target.shape}')
+            train_target = train_target.values.ravel().astype(int)
 
             logging.info('Converting train_target to Pandas Series')
             train_target = pd.Series(train_target)
 
-            logging.info('Applying random over-sampling')
             ROS = RandomOverSampler(sampling_strategy='minority', random_state=42)
-            resampled_train_features, resampled_train_target = ROS.fit_resample(train_features, train_target.sample(n= train_features.shape[0], random_state= 42))
+            resampled_train_features, resampled_train_target = ROS.fit_resample(train_features, train_target)
 
             logging.info('Saving resampled data')
             pickle_file(object=resampled_train_features, file_name='resampled_train_features.pkl')
@@ -39,6 +54,3 @@ class OverSampling:
         except Exception as CE:
             logging.error(f'Error during random over-sampling: {str(CE)}', exc_info=True)
             raise CustomException(str(CE))
-
-# Assuming you have missed importing pandas at the beginning of your script
-import pandas as pd
