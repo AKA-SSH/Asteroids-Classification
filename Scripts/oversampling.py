@@ -48,6 +48,7 @@ class OverSampling:
             logging.info('Saving resampled data')
             pickle_file(object=resampled_train_features, file_name='resampled_train_features.pkl')
             pickle_file(object=resampled_train_target, file_name='resampled_train_target.pkl')
+            pickle_file(object=ROS, file_name='random_over_sampler.pkl')
 
             logging.info('Random over-sampling completed')
 
