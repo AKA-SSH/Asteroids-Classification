@@ -1,9 +1,11 @@
+import os
 import pickle
 import pandas as pd
 import streamlit as st
 from utils.unpickle_file import unpickle_file
 
-RFC = unpickle_file('artifacts\\model.pkl')
+model_path = os.path.join('artifacts', 'model.pkl')
+RFC = unpickle_file(file_name=model_path)
 
 def data_split(raw_dataframe):
     selected_columns = ['epoch', 'e', 'i', 'om', 'w', 'ma', 'n', 'class', 'rms', 'neo']

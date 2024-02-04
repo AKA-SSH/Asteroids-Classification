@@ -2,11 +2,17 @@ import pandas as pd
 import streamlit as st
 from utils.unpickle_file import unpickle_file
 import base64  # Import base64 module for encoding
+import os
 
-# Function to load the model
-LE = unpickle_file('artifacts\label_encoder.pkl')
-KM = unpickle_file('artifacts\\kmeans_clustering.pkl')
-RFC = unpickle_file('artifacts\\model.pkl')
+artifacts_dir = 'artifacts'
+
+LE_path = os.path.join(artifacts_dir, 'label_encoder.pkl')
+KM_path = os.path.join(artifacts_dir, 'kmeans_clustering.pkl')
+RFC_path = os.path.join(artifacts_dir, 'model.pkl')
+
+LE = unpickle_file(file_name=LE_path)
+KM = unpickle_file(file_name=KM_path)
+RFC = unpickle_file(file_name=RFC_path)
 
 # Function to make predictions
 def model_predict(test_features):

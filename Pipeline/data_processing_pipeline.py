@@ -1,12 +1,16 @@
+import os
 import base64
 import pandas as pd
 import streamlit as st
 from utils.unpickle_file import unpickle_file
 
-# Load pickled files
-LE = unpickle_file(file_name='artifacts\\label_encoder.pkl')
-KM = unpickle_file(file_name='artifacts\\kmeans_clustering.pkl')
-OS = unpickle_file(file_name='artifacts\\random_over_sampler.pkl')
+label_encoder_path = os.path.join('artifacts', 'label_encoder.pkl')
+kmeans_clustering_path = os.path.join('artifacts', 'kmeans_clustering.pkl')
+random_over_sampler_path = os.path.join('artifacts', 'random_over_sampler.pkl')
+
+LE = unpickle_file(file_name=label_encoder_path)
+KM = unpickle_file(file_name=kmeans_clustering_path)
+OS = unpickle_file(file_name=random_over_sampler_path)
 
 # Set option to display all columns
 pd.set_option('display.max_columns', None)
