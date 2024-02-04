@@ -1,8 +1,8 @@
 import pandas as pd
 import streamlit as st
-from StreamlitApp.data_processing_pipeline import process_data, get_csv_download_link
-from StreamlitApp.model_training_pipeline import main as model_training_main
-from StreamlitApp.prediction_pipeline import main as prediction_pipeline_main
+from Pipeline.data_processing_pipeline import process_data, get_csv_download_link
+from Pipeline.model_training_pipeline import main as model_training_main
+from Pipeline.prediction_pipeline import main as prediction_pipeline_main
 
 def main():
     st.title("Complete Data Processing, Model Training, and Prediction App")
