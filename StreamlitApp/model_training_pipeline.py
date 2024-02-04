@@ -19,11 +19,11 @@ def main():
     if uploaded_file is not None:
         try:
             st.subheader("Preview of the Uploaded Data:")
-            df = pd.read_csv(uploaded_file)
-            st.write(df.head())
+            dataframe = pd.read_csv(uploaded_file)
+            st.write(dataframe.head())
 
             st.subheader("Training the Model:")
-            features, target = data_split(df)
+            features, target = data_split(dataframe)
             RFC.fit(features, target)
             st.success("Model trained successfully!")
 

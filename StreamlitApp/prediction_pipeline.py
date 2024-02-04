@@ -4,6 +4,8 @@ from utils.unpickle_file import unpickle_file
 import base64  # Import base64 module for encoding
 
 # Function to load the model
+LE = unpickle_file('artifacts\label_encoder.pkl')
+KM = unpickle_file('artifacts\\kmeans_clustering.pkl')
 RFC = unpickle_file('artifacts\\model.pkl')
 
 # Function to make predictions
@@ -26,39 +28,34 @@ def main():
     uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
 
     if uploaded_file is not None:
-        # Display uploaded dataframe
         st.subheader("Uploaded Dataframe:")
-        try:
-            df = pd.read_csv(uploaded_file)
-            st.dataframe(df.head())
+        raw_dataframe = pd.read_csv(uploaded_file)
 
-            # Make predictions
-            st.subheader("Predictions:")
-            predictions = model_predict(uploaded_file)
-            if predictions is not None:
-                df['Prediction'] = predictions
-                st.dataframe(df)
+        # screening in only the selected columns
+        selected_columns = ['epoch', 'e', 'i', 'om', 'w', 'ma', 'n', 'class', 'rms']
+        dataframe = raw_dataframe[selected_columns]
 
-                # Download predictions as CSV
-                st.subheader("Download Predictions:")
-                csv_download_link(df, "predictions.csv", "Download Predictions CSV")
-            else:
-                st.warning("The uploaded file is empty or does not contain any columns.")
-        except pd.errors.EmptyDataError:
-            st.warning("The uploaded file is empty or does not contain any columns.")
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
+        # applying label encoding
+        dataframe['class'] = LE.fit_transform(dataframe['class'])
 
-    # Print debug information
-    st.write(f"uploaded_file: {uploaded_file}")
-    st.write(f"df: {df}")
+        # applying clustering
+        dataframe['cluster'] = KM.fit_predict(dataframe)
 
-# Function to create a download link for a dataframe
-def csv_download_link(df, filename, link_text):
-    csv = df.to_csv(index=False)
-    b64 = base64.b64encode(csv.encode()).decode()
-    href = f'<a href="data:file/csv;base64,{b64}" download="{filename}">{link_text}</a>'
-    st.markdown(href, unsafe_allow_html=True)
+        # making predictions
+        predictions = RFC.predict(dataframe)
+        dataframe['predicted_neo'] = predictions
+
+        # Display the modified DataFrame
+        st.dataframe(dataframe.head())
+
+        # Download Button
+        download_button = st.button("Download Predictions")
+
+        if download_button:
+            csv_data = dataframe.to_csv(index=False).encode()
+            b64_csv = base64.b64encode(csv_data).decode()
+            href = f'<a href="data:file/csv;base64,{b64_csv}" download="modified_dataframe.csv">Download Modified DataFrame</a>'
+            st.markdown(href, unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
