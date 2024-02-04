@@ -15,7 +15,7 @@ def encode_categorical_data(features, target):
     target = target.map({'N': 0, 'Y': 1})
     categorical_columns = features.select_dtypes(include='O').columns
     for column in categorical_columns:
-        features[column] = LE.transform(features[column])
+        features[column] = LE.fit_transform(features[column])
     return features, target
 
 def clustering_data(features):
@@ -27,6 +27,7 @@ def process_data(raw_data_csv):
 
     selected_columns = ['epoch', 'e', 'i', 'om', 'w', 'ma', 'n', 'class', 'rms', 'neo']
     dataframe = raw_dataframe[selected_columns]
+    dataframe= dataframe.dropna()
 
     features, target = dataframe.drop('neo', axis=1).copy(), dataframe['neo'].copy()
     encoded_features, encoded_target = encode_categorical_data(features, target)
