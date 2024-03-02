@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+</head>
+<body>
+    <h1>{{ title }}</h1>
+    <p><a href="/">Back to Home</a></p>
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" name="csv_file">
+        <input type="submit" value="Preprocess">
+    </form>
+    {% if csv_link %}
+        <p><a href="{{ csv_link }}">Download Processed CSV</a></p>
+    {% endif %}
+    {% if error %}
+        <p>Error: {{ error }}</p>
+    {% endif %}
+</body>
+</html>

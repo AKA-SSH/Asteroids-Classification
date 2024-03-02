@@ -1,67 +1,101 @@
-from flask import Flask, render_template, request
+import os
 import pandas as pd
+from flask import Flask, render_template, request, send_file
+from Pipeline.data_processing_pipeline import process_data, get_csv_download_link
+from Pipeline.model_training_pipeline import data_split
+from utils.unpickle_file import unpickle_file
 
 app = Flask(__name__)
 
-# Placeholder for loaded data
-loaded_data = None
+# Load the trained model
+model_path = os.path.join('artifacts', 'model.pkl')
+RFC = unpickle_file(file_name=model_path)
 
-@app.route("/")
-def index():
-    return render_template("index.html")
+# Define a function for model training
+def train_model(features, target):
+    RFC.fit(features, target)
 
-@app.route("/data_preprocessing", methods=["GET", "POST"])
-def data_preprocessing():
-    global loaded_data
-    if request.method == "POST":
-        file = request.files["file"]
-        if file.filename.endswith(('csv', 'xls', 'xlsx')):
-            try:
-                # Load data from uploaded file
-                if file.filename.endswith('csv'):
-                    loaded_data = pd.read_csv(file)
-                else:
-                    loaded_data = pd.read_excel(file)
-
-                # Perform data preprocessing (Placeholder)
-                processed_features = loaded_data  # Placeholder for processed features DataFrame
-                processed_target = pd.DataFrame() # Placeholder for processed target DataFrame
-
-                return render_template("data_preprocessing.html", processed_features=processed_features, processed_target=processed_target)
-            except Exception as e:
-                return "Error processing data: " + str(e)
+# Define a function for model prediction
+def model_predict(test_features):
+    try:
+        if test_features is not None and test_features.size > 0:
+            prediction = RFC.predict(test_features)
+            return prediction
         else:
-            return "Please upload a CSV file."
-    else:
-        return render_template("data_preprocessing.html")
+            return None
+    except Exception as e:
+        print(f"An error occurred during prediction: {str(e)}")
+        return None
 
-@app.route("/model_training")
-def model_training():
-    global loaded_data
-    if loaded_data is not None:
-        try:
-            # Perform model training (Placeholder)
-            # Placeholder for trained model
-            trained_model = None
-            return render_template("model_training.html", trained_model=trained_model)
-        except Exception as e:
-            return "Error training model: " + str(e)
-    else:
-        return "Please preprocess data before training the model."
+@app.route('/')
+def home():
+    return render_template('index.html')
 
-@app.route("/prediction")
-def prediction():
-    global loaded_data
-    if loaded_data is not None:
-        try:
-            # Perform prediction (Placeholder)
-            # Placeholder for predicted results
-            predicted_results = None
-            return render_template("prediction.html", predicted_results=predicted_results)
-        except Exception as e:
-            return "Error making predictions: " + str(e)
-    else:
-        return "Please preprocess data before making predictions."
+@app.route('/preprocess', methods=['GET', 'POST'])
+def preprocess():
+    if request.method == 'POST':
+        uploaded_file = request.files['csv_file']
+        if uploaded_file.filename != '':
+            try:
+                processed_features, processed_target = process_data(uploaded_file)
+                processed_csv_link = get_csv_download_link(processed_features, processed_target)
+                return render_template('preprocess.html', title='Preprocessed Data', csv_link=processed_csv_link)
+            except Exception as e:
+                error_message = f"Error processing data: {str(e)}"
+                return render_template('preprocess.html', title='Error', error=error_message)
+    
+    return render_template('preprocess.html', title='Asteroid Classification')
 
-if __name__ == "__main__":
+@app.route('/train', methods=['GET', 'POST'])
+def train():
+    if request.method == 'POST':
+        uploaded_file = request.files['csv_file']
+        if uploaded_file.filename != '':
+            try:
+                dataframe = pd.read_csv(uploaded_file)
+                features, target = data_split(dataframe)
+                train_model(features, target)
+                return render_template('train.html', title='Training Successful', trained=True)
+            except Exception as e:
+                error_message = f"Error training model: {str(e)}"
+                return render_template('train.html', title='Error', error=error_message)
+    
+    return render_template('train.html', title='Train Model')
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    if request.method == 'POST':
+        uploaded_file = request.files['csv_file']
+        if uploaded_file.filename != '':
+            try:
+                # Process the uploaded file
+                dataframe = pd.read_csv(uploaded_file)
+                predictions = model_predict(dataframe)
+                
+                if predictions is not None:
+                    # Add predictions to the DataFrame
+                    dataframe['predicted_neo'] = predictions
+                    
+                    # Convert DataFrame to CSV
+                    csv_data = dataframe.to_csv(index=False)
+                    
+                    # Return CSV file as attachment
+                    return send_file(
+                        filename_or_fp=csv_data,
+                        mimetype='text/csv',
+                        as_attachment=True,
+                        attachment_filename='predicted_results.csv'
+                    )
+                else:
+                    return render_template('error.html', error="No data for prediction.")
+            except Exception as e:
+                error_message = f"Error predicting data: {str(e)}"
+                return render_template('error.html', error=error_message)
+        else:
+            return render_template('error.html', error="No file uploaded.")
+    else:
+        return render_template('error.html', error="Invalid request method.")
+
+
+if __name__ == '__main__':
     app.run(debug=True)
