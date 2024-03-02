@@ -12,6 +12,7 @@ matplotlib
 # machine learning
 scikit-learn
 # webapp
+Flask
 streamlit
 # editable installation in current directory
 -e .
