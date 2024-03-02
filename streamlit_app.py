@@ -1,9 +1,8 @@
 import pandas as pd
 import streamlit as st
 from Pipeline.data_processing_pipeline import process_data, get_csv_download_link
-from Pipeline.model_training_pipeline import main as model_training_main
-from Pipeline.prediction_pipeline import main as prediction_pipeline_main
-
+from Pipeline.model_training_pipeline import access_training_pipeline
+from Pipeline.prediction_pipeline import access_prediction_pipeline
 def main():
     st.title("Complete Data Processing, Model Training, and Prediction App")
 
@@ -15,10 +14,10 @@ def main():
         data_preprocessing_page()
     elif page == "Model Training":
         st.markdown("### Model Training")
-        model_training_main()
+        access_training_pipeline()
     elif page == "Prediction":
         st.markdown("### Model Prediction")
-        prediction_pipeline_main()
+        access_prediction_pipeline()
 
 def data_preprocessing_page():
     st.write(
