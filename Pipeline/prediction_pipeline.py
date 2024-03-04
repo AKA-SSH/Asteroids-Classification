@@ -27,7 +27,7 @@ def model_predict(test_features):
         return None
 
 # Streamlit App
-def main():
+def access_prediction_pipeline():
     st.title("CSV Uploader and Model Prediction")
 
     # Upload CSV file
@@ -64,4 +64,4 @@ def main():
             st.markdown(href, unsafe_allow_html=True)
 
 if __name__ == "__main__":
-    main()
+    access_prediction_pipeline()

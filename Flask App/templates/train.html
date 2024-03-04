@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+</head>
+<body>
+    <h2>{{ title }}</h2>
+    <p><a href="/">Back to Home</a></p>
+    {% if next_route %}
+    <p><a href="{{ next_route }}">Next Step</a></p>
+    {% endif %}
+    
+    <!-- Form for CSV input -->
+    <form action="/train" method="post" enctype="multipart/form-data">
+        <label for="csv_file">Upload CSV File:</label>
+        <input type="file" id="csv_file" name="csv_file" accept=".csv">
+        <button type="submit">Train Model</button>
+    </form>
+</body>
+</html>

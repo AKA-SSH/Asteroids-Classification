@@ -59,7 +59,7 @@ def get_csv_download_link(df_features, df_target):
     
     return href
 
-def main():
+def access_processing_pipeline():
     st.title("Data Processing App")
     uploaded_file = st.file_uploader("Upload a CSV file", type=["csv", "xls", "xlsx"])
 
@@ -83,4 +83,4 @@ def main():
             st.error(f"Error processing data: {str(e)}")
 
 if __name__ == "__main__":
-    main()
+    access_processing_pipeline()

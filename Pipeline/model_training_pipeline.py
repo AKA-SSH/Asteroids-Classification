@@ -13,7 +13,7 @@ def data_split(raw_dataframe):
     features, target = dataframe.drop('neo', axis=1), dataframe['neo']
     return features, target
 
-def main():
+def access_training_pipeline():
     st.title("RFC Model Training App")
 
     uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
@@ -41,4 +41,4 @@ def main():
             st.error(f"An error occurred: {str(e)}")
 
 if __name__ == "__main__":
-    main()
+    access_training_pipeline()
