@@ -22,5 +22,5 @@ setup (name='classification',
       long_description=long_description_content,
       long_description_content_type='text/markdown',
       packages=find_packages(),
-      install_requires=read_file(r'Environement\requirements.txt'),
+      install_requires=read_file(r'requirements.txt'),
       python_requires='>=3.8')
